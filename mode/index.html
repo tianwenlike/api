@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="./static/layui/css/layui.css">
+    <script src="./static/layui/layui.all.js"></script>
+	<link rel="stylesheet" href="./static/css/iconfont.css">
+	<link rel="stylesheet" href="./static/style.css">
+	<link rel="stylesheet" href="./static/css/animation.css">
+	<link rel="stylesheet" type="text/css" href="./static/css/animation.css"/>
+    <title>福利龙移动</title>
+</head>
+<body style="background-color:#e6e6e6;">
+<div class="content">
+
+    <div class="layui-btn-normal colorfff box wow fadeInDown">
+       <div class="box_lef">
+		   <div id="DataCenterName" class="xinx">数据中心：福利龙测试</div>
+		   <div id="CurrentOrganizationInfo" class="xinx">组织名称：福利龙</div>
+	   </div>
+       <div class="box_right">
+		   <div class="username rightside xinx">郑工<span class="bumenname"></span></div>
+		   <div id="logout" class="rightside xinx">切换账号</div>
+	   </div>
+    </div>
+	
+	<!-- 动态获取数据	 -->
+	<div id="view"></div>
+	
+	
+	
+	
+    <!-- <div class="layui-row textcenter pb">
+     <div class="pb_box">
+		 <p class="ls textleft paddingleft10 fb">采购管理</p>
+		 <div class="layui-row">
+			 
+		 <div class="layui-col-xs4 ">
+		     <div class="grid-demo">
+		         <a href="http://192.168.1.189:88/yd/fll/fll/caigouruku.html">
+		 			<i class="iconfont icon-rukuguanli"></i>
+		             <div class="lay-zi">采购入库</div>
+		         </a>
+		     </div>
+		 </div>
+		 
+		 
+		 <div class="layui-col-xs4">
+		     <div class="grid-demo">
+		         <a href="http://192.168.1.189:88/yd/fll/fll/test.html">
+		            <i class="iconfont icon-chukuguanli"></i>
+		             <div class="lay-zi">采购出库</div>
+		         </a>
+		     </div>
+		 </div>
+		 
+		 </div>
+	 </div>
+    </div>
+	
+	
+	
+    <div class="layui-row textcenter pb">
+		<div class="pb_box">
+        <p class="ls textleft paddingleft10 fb">销售管理</p>
+       <div class="layui-row">
+		   <div class="layui-col-xs4">
+		       <div class="grid-demo">
+		           <a href="fll/xiaoshouchuku.html">
+		              <i class="iconfont icon-navicon-cgrkd"></i>
+		               <div class="lay-zi">销售出库</div>
+		           </a>
+		       </div>
+		   </div>
+	   </div>
+		</div>
+    </div>
+	
+	
+	
+	
+	
+	
+    <div class="layui-row textcenter pb">
+		<div class="pb_box">
+        <p class="ls textleft paddingleft10 fb">生产管理</p>
+       <div class="layui-row">
+		
+		   <div class="layui-col-xs4">
+		       <div class="grid-demo">
+		           <a href="fll/shengchanglingliao.html">
+		              <i class="iconfont icon-shengchanguanli1"></i>
+		               <div class="lay-zi">生产领料</div>
+		           </a>
+		       </div>
+		   </div>
+		   
+		   <div class="layui-col-xs4">
+		       <div class="grid-demo">
+		           <a href="fll/shengchanruku.html">
+		               <i class="iconfont icon-ruku"></i>
+		               <div class="lay-zi">生产入库</div>
+		           </a>
+		       </div>
+		   </div>
+		   
+		   <div class="layui-col-xs4">
+		       <div class="grid-demo">
+		           <a href="fll/shengchantuiliao.html">
+		              <i class="iconfont icon-shengchanlingliaoyutuiliao"></i>
+		               <div class="lay-zi">生产退料</div>
+		           </a>
+		       </div>
+		   </div>
+		   
+	   </div>
+		</div>
+    </div> -->
+
+
+
+
+</div>
+
+</body>
+
+<!-- layui模板引擎 -->
+<!-- <script id="demo" type="text/html">
+	
+	div class="layui-row textcenter pb">
+	 <div class="pb_box">
+		 <p class="ls textleft paddingleft10 fb">采购管理</p>
+		 <div class="layui-row">
+			 
+			 
+			 
+		  {{#  layui.each(d,function(index, item){ }}
+		 <div class="layui-col-xs4 ">
+		     <div class="grid-demo">
+		         <a href="{{ item.modname }}">
+		 			<i class="iconfont icon-rukuguanli">{{ item.alias }}</i>
+		             <div class="lay-zi">{{ item.modname }}</div>
+		         </a>
+		     </div>
+		 </div>
+		 {{#  }); }}
+		
+		 </div>
+	 </div>
+	</div>
+</script> -->
+
+
+<script src="./static/js/wow.js" type="text/javascript" charset="utf-8"></script>
+<script src="./static/js/jquery.min.js"></script>
+<script type="text/javascript" charset="UTF-8">
+
+$(function(){
+	
+	new WOW().init();
+	
+	setTimeout(function(){
+		 layer.msg('菜单页面');
+	},200)
+})
+
+
+
+	
+	// 存储页面数据  判断是否登录
+    var username = window.localStorage.getItem('username');
+    var password = window.localStorage.getItem('password');
+	var acctID = window.localStorage.getItem('acctID');
+	var lcid = window.localStorage.getItem('lcid');
+    var DataCenterName = window.localStorage.getItem('DataCenterName');
+    var CurrentOrganizationInfo = window.localStorage.getItem('CurrentOrganizationInfo');
+
+
+
+	console.log(username);
+	console.log(password);
+	console.log(acctID);
+	console.log(lcid);
+	console.log(DataCenterName);
+	console.log(CurrentOrganizationInfo);
+
+
+
+	window.localStorage.setItem('username',username);
+	window.localStorage.setItem('password',password);
+	window.localStorage.setItem('acctID',acctID);
+	window.localStorage.setItem('lcid',lcid);									  
+	window.localStorage.setItem('DataCenterName',DataCenterName);
+	window.localStorage.setItem('CurrentOrganizationInfo',CurrentOrganizationInfo);
+
+
+
+
+
+
+    if (username != '' && DataCenterName != '' && CurrentOrganizationInfo != '') {
+
+        $('.username').html('当前用户:' + '[' + username + ']');
+        $('#DataCenterName').html('数据中心:' + DataCenterName);
+        $('#CurrentOrganizationInfo').html('组织名称:' + CurrentOrganizationInfo);
+    }
+	
+	
+	
+	
+	
+	
+    $('#logout').click(function () {			
+		layer.confirm('是否返回重新登录？', {
+		  btn: ['是','否'] //按钮
+		}, function(){
+		  layer.msg('正在跳转页面', {icon: 1});
+		  setTimeout(function(){
+			   window.location.href="javascript:history.go(-1)";
+		  },500)
+		},function(){
+		  layer.msg('你取消了', {
+			time: 20000, //20s后自动关闭
+			btn: ['明白了', '知道了']
+		  });
+		});
+		
+    });
+
+
+
+
+	
+	
+	
+	$.ajax({
+	    url: 'http://192.168.1.189:88/k3cloud/Kingdee.BOS.WebApi.ServicesStub.AuthService.ValidateUser.common.kdsvc',
+	    data:{username:username,password:password,acctID:acctID,lcid:lcid},
+	    type: 'post',
+	    dataType: 'json',
+	    success: function (result) {
+	        console.log(result)
+	        if (result.LoginResultType == 1) {
+	            var menudata = {
+	                FormId: "kdc8fed89be4143e4859e28f9f5ec7538",
+	                FieldKeys: "FName,FNumber,F_PDA_ObjectTypeNumber",
+	                FilterString: "FDocumentStatus='C'",
+	            };
+	            $.ajax({
+	                url: 'http://192.168.1.189:88/k3cloud/Kingdee.BOS.WebApi.ServicesStub.DynamicFormService.ExecuteBillQuery.common.kdsvc',
+	                data: {data: JSON.stringify(menudata)},
+	                type: 'post',
+	                dataType: 'json',
+	                success: function (result) {
+	                    if (result) {
+	                        var menu = '';
+	                       
+	                            // menu = menu + '<div class="layui-col-xs3"><div class="grid-demo">' +
+	                            //     '<a href="'+'./main.html?formid='+ result[i][2] + '">' +
+	                            //     '<img width="90" height="90" alt="" src="./../static/img/bootstrap-icons.svg" class="widthbf40"/>'+
+	                            //     '<div>'  '</div>' +
+	                            //     '</a>' +
+	                            //     '</div>' +
+	                            //     '</div>'+
+	                        
+							
+							
+										menu+="<div class='layui-row textcenter pb wow fadeInLeftBig' data-wow-duration='1s'>";
+										menu+="<div class='pb_box'>";
+										menu+="<p class='ls textleft paddingleft10 fb'>生产管理</p>";
+										menu+="<div class='layui-row'>";
+											
+											 for (i in result) {
+												menu+="<div class='layui-col-xs4 wow ' data-wow-delay='"+i+"*0.2s' >"+
+													"<div class='grid-demo'>"+
+														"<a href='test.html'>"+
+															" <i class='iconfont icon-rukuguanli'></i>"+
+															"<div class='lay-zi'>"+result[i][0].substring(0, result[i][0].length - 1)+"</div>"+
+														  "</a>"+
+													  "</div>"+
+												  "</div>";
+												  }
+												  
+											  menu+="</div>";
+											menu+="</div>";
+										  
+											
+										
+								
+							
+							
+							
+							
+							// var getTpl=$("#demo").innerHTML
+							// ,view = document.getElementById('view');
+							// laytpl(getTpl).render(result, function(html){
+							//   view.innerHTML = html;
+							// });
+							
+							
+							
+	                        if (menu) {
+	                            console.log(menu)
+	                            $('#view').html(menu)
+	                        }
+	                    }
+	                }
+	            });
+	        }
+	    }
+	});
+	
+	 $('.username').click(function () {
+		 layer.msg('您好！'+username, {time: 5000, icon:6});
+		 })
+	
+	
+
+</script>
+</html>

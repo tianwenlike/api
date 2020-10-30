@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html class="ui-page-login">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
+    <title>福利龙移动办公</title>
+    <link href="./static/mui.min.css" rel="stylesheet">
+    <link href="./static/style.css" rel="stylesheet">
+    <link href="./static/iconfont.css" rel="stylesheet">
+    <link rel="stylesheet" href="./static/layui/css/layui.css">
+    <link rel="stylesheet" href="./static/layui/css/layui.mobile.css">
+    <script src="./static/layui/layui.all.js"></script>
+	<!-- <script src="static/js/jquery.min.js" type="text/javascript" charset="utf-8"></script> -->
+    <link rel="stylesheet" type="text/css" href="./static/css/animation.css"/>
+	<script src="./static/js/wow.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+<div class="mui-content container wow fadeInLeft">
+    <form id="login-form" class="mui-input-group guding">
+        <div class="loginContainer">
+            <div class="divTitle"></div>
+            <div class="mui-input-row">
+                <label style="font-size:14px;">数据中心</label>
+                <select name="DataCenterName" class="mui-select" id="DataCenterName">
+                    <option value="5f126251a29fb2">福利龙培训练习</option>
+                    <option value="5f40731a68c4f8">福利龙演练</option>
+                    <option value="5f3b85cc33b559">福利龙正式账套</option>
+					<option value ="5f6953ad19b475">测试登录</option>
+                </select>
+            </div>
+            <div class="mui-input-row input-row-top">
+                <label>组织</label>
+                <select class="mui-select" id="zuzhi">
+                    <option selected>福利龙培训练习</option>
+                </select>
+            </div>
+
+            <div class="mui-input-row input-row-top">
+                <label>账号</label>
+                <input id="username" name="username" type="text" class="mui-input-clear mui-input my-input"
+                       placeholder="账号" data-input-clear="1">
+                <span class="mui-icon mui-icon-clear mui-hidden"></span>
+            </div>
+            <div class="mui-input-row input-row-top" style="margin-top:8px !important;">
+                <label>密码</label>
+                <input id="password" type="password" name="password" class="mui-input-clear mui-input my-input "
+                       placeholder="密码" data-input-clear="2">
+                <span class="mui-icon mui-icon-clear mui-hidden"></span>
+            </div>
+            <div class="input-row-top my-checkbox">
+                <input name="checkbox" id="checkbox" type="checkbox">
+                <label>记住账号</label>
+            </div>
+            <div class="mui-content-padded">
+                <button type="button" id="login" class="mui-btn mui-btn-block mui-btn-primary" lay-submit
+                        lay-filter="login">登录
+                </button>
+            </div>
+
+        </div>
+    </form>
+    <div class="third-login-box guding2">
+        <div class="third-login-line">
+            <span>联系方式</span>
+        </div>
+    </div>
+    <div style="position:absolute;top:410px;text-align:center;font-size:14px;color:#666;">
+        <div style="color:#666;" class="p2">东莞市彩蝶软件有限公司</div>
+        <div class="p2"><a href="tel:0769-22465610" style="color:#666;">0769-22465610</div>
+        <div style="color:#666;" class="p2">东莞市南城街道新城社区鸿福路108号<br/>中盛商务大厦1203-1204号</div>
+    </div>
+</div>
+<script src="./static/js/jquery.min.js"></script>
+<script>
+    function setCookie(name, value) {
+        var exp = new Date();
+        exp.setTime(exp.getTime() + 3600 * 30 * 1000);
+        document.cookie = name + "=" + escape(value) + ";expires=" + exp.toGMTString() + ";path=/";
+    }
+
+    function getCookie(name) {
+        var arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+        if (arr = document.cookie.match(reg)) {
+            return unescape(arr[2]);
+        } else {
+            return null;
+        }
+    }
+
+    function delCookie(name) {
+        var exp = new Date();
+        exp.setTime(exp.getTime() - 60 * 60 * 1000);
+        var cval = getCookie(name);
+        if (cval != null)
+            document.cookie = name + "=" + cval + ";expires=" + exp.toGMTString() + ";path=/";
+    }
+</script>
+<script>
+	
+	// 记住账号
+    if ((window.localStorage.getItem('fll_checkbox') == '') || (window.localStorage.getItem('fll_checkbox') == null)) {
+    } else {
+        $('#checkbox').prop('checked', true);
+        $('#username').val(window.localStorage.getItem('fll_username'));
+    }
+	
+	
+	
+	
+	
+
+	
+	
+	// 点击登录
+    $('#login').click(function() {
+        if ($('#checkbox').is(':checked')) {
+            window.localStorage.setItem('fll_checkbox', 1);
+            window.localStorage.setItem('fll_username', $('#username').val());
+        }
+        if ($('#username').val() == '') {
+            layer.msg('请填账号', {time: 1000});
+            return false;
+        }
+        if ($('#password').val() == '') {
+            layer.msg('请填密码', {time: 1000});
+            return false;
+        }
+				var username=$("#username").val();
+				var password=$("#password").val();
+				var acctID=$('#DataCenterName option:selected').val();
+				var lcid='2052';
+				
+				
+				
+				var DataCenterName=$('#DataCenterName option:selected').text();
+				var CurrentOrganizationInfo=$("#zuzhi option:selected").val();
+		
+		
+				$.ajax({
+					type:"POST",
+					url:"http://192.168.1.189:88/k3cloud/Kingdee.BOS.WebApi.ServicesStub.AuthService.ValidateUser.common.kdsvc",
+					data:{"username":username,"password":password,"acctID":acctID,"lcid":lcid},
+					success: function(res){
+						var d=eval("("+res+")"); 
+						console.log(res);
+						console.log(d);
+						 if(d.LoginResultType==1)
+						 {
+							 layer.msg('登录成功');
+							 setTimeout(function(){
+								 window.localStorage.setItem('username',username);
+								 window.localStorage.setItem('password',password);
+								 window.localStorage.setItem('acctID', d.Context.DBid);
+								 window.localStorage.setItem('lcid', "2052");
+								 window.localStorage.setItem('DataCenterName',DataCenterName);
+								 window.localStorage.setItem('CurrentOrganizationInfo',CurrentOrganizationInfo);
+								 
+							 	window.location.href="http://192.168.1.189:88/yd/mode/index.html";	
+							 },2000);
+							
+						 }
+						 else if(d.LoginResultType==0)
+						 {
+							 layer.alert('登录账号密码不正确！', {
+							   icon:2,
+							   skin: 'layer-ext-moon'
+							 });
+						 }
+						 else{
+							  layer.msg('登录失败!');
+						 }
+					},  
+					 error:function(data){
+						 layer.alert('数据请求失败！', {
+						   icon:2,
+						   skin: 'layer-ext-moon'
+						 });
+						
+					 },
+				});
+				return false;
+			
+			
+			
+			$("#DataCenterName").change(function(){
+			    var options=$("#DataCenterName option:selected");
+			    $("#zuzhi option:selected").text(options.text())
+			});
+		})
+	
+	
+	
+	
+	
+	
+	  // var JSONP=document.createElement("script");
+	  //   JSONP.type="text/javascript";
+	  //   JSONP.src="http://47.106.244.246/K3Cloud/Kingdee.BOS.WebApi.ServicesStub.AuthService.ValidateUser.common.kdsvc";
+	  //   document.getElementsByTagName("head")[0].appendChild(JSONP);
+		
+		
+$(function(){
+	setTimeout(function(){
+		 layer.msg('hello');
+	},200)
+})
+
+new WOW().init();
+	  
+</script>
+</body>
+</html>

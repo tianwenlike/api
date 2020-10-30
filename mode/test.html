@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no,maximum-scale=4.0,user-scalable=yes">
+  <title>table模块快速使用</title>
+  <link rel="stylesheet" type="text/css" href="./static/layui/css/layui.css"/>
+  <style>.laytable-cell-1-0-0{ width: 45px; }.laytable-cell-1-0-1{ width: 100px; }.laytable-cell-1-0-2{ width: 90px; }.laytable-cell-1-0-3{ width: 190px; }.laytable-cell-1-0-4{ width: 70px; }</style>
+	<link rel="stylesheet" href="./static/bootstrap3/css/bootstrap.min.css">
+	<link rel="stylesheet" href="./static/font-awesome-4.7.0/css/font-awesome.css">
+	<link rel="stylesheet" href="./static/style.css">
+	<link rel="stylesheet" type="text/css" href="./static/layui/css/layui.css"/>
+</head>
+<body>
+	
+
+	
+	<div id="all">
+		
+			<div class="top_box">
+				<span class="top_jh1" onclick="javascript:history.back(-1);">
+					<i class="fa fa-chevron-left" aria-hidden="true"></i>
+				</span>
+				<span class="top_jh2">
+					数据获取中心
+				</span>
+			</div>
+
+		<table id="demo" lay-filter="demo"></table>
+			
+	</div>
+	
+	
+
+<input type="text" id="formid" value="">
+ 
+
+<script src="./static/js/common.js" type="text/javascript" charset="utf-8"></script> 
+<script src="./static/js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="./static/js/layer.js" type="text/javascript" charset="utf-8"></script>
+<script src="./static/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+
+
+<script type="text/html" id="barDemo">
+ <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="tableSelect">查看</a>
+   <a class="layui-btn layui-btn-xs" lay-event="tableUpdate">编辑</a>
+   <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="tableDelete">删除</a>
+</script>
+<script>
+	
+var formid = getQueryVariable('formid');
+	if(formid){
+	    $('#formid').val(formid);
+	}
+
+layer.msg('测试据页面');
+	
+
+
+
+
+$(function(){
+	 // 存储页面数据  判断是否登录
+	     var username = window.localStorage.getItem('username');
+	     var password = window.localStorage.getItem('password');
+	 	var acctID = window.localStorage.getItem('acctID');
+	 	var lcid = window.localStorage.getItem('lcid');
+	     var DataCenterName = window.localStorage.getItem('DataCenterName');
+	     var CurrentOrganizationInfo = window.localStorage.getItem('CurrentOrganizationInfo');
+	 
+	 
+	 // 1.先判断登录
+	 $.ajax({
+		 url:"http://192.168.1.189:88/k3cloud/Kingdee.BOS.WebApi.ServicesStub.AuthService.ValidateUser.common.kdsvc",
+		 type:"POST",
+		 data:{
+			"username": username,
+			"password": password,
+			"acctID": acctID,
+			"lcid": lcid
+			},
+		 // dataType:"json",
+		 success:function(xdata){
+			 // BD_Customer
+			 console.log(xdata);
+			if(xdata != ''){
+				 var dataa={
+					FormId:"k8152c172ab47452887cbf04bfad6547f",
+					FieldKeys: "FCreatorId,FDocumentStatus,FName,FMaterialID,FBizType,FCustId,FQty,FInStockDate",
+					Limit:"200",
+					FilterString:"FDocumentStatus='C'",
+				 }
+				 
+				 
+				 $.ajax({
+					url:"http://192.168.1.189:88/k3cloud/Kingdee.BOS.WebApi.ServicesStub.DynamicFormService.ExecuteBillQuery.common.kdsvc",
+					data:{data:JSON.stringify(dataa)},
+					type:"POST",
+					dataType:'json',
+					success:function(res){
+						console.log(res);			
+						if(res != ""){
+							// 重新定义表单格式
+							var len =0;
+							// 定义新JSON函数
+							var xres=[];
+							
+							// 定义时间
+							var time=[];
+							
+						
+							
+							
+						for(var i in res){
+							// 序列号
+							
+								// console.log(res[i][7]);
+								var time = [];
+								time = JSON.stringify(res[i][7]);
+								var year =time.substr(1,4);
+								var moth =time.substr(6,2);
+								var day =time.substr(9,2);
+								
+								if(time[i]==null){
+									time='时间为空';
+								}
+								else{
+									time=year+'年'+moth+'月'+day+'日';
+								}
+
+
+							len=parseInt(i)+1;
+							xres[i]={
+								len:len,
+								ID:res[i][0],
+								name:res[i][1],
+								xin:res[i][2],
+								xin2:res[i][3],
+								xin3:res[i][4],
+								xin4:res[i][5],
+								xin5:res[i][6],
+								time:time,
+							}
+						}
+							console.log(xres);
+							
+							layui.use('table', function(){
+							  var table = layui.table;
+							  
+						
+							  
+						  //第一个实例
+						  table.render({
+							elem: '#demo'
+							// 获取内容参数
+							,data:xres
+							,limit: 16   //显示条数
+							,cellMinWidth: 80
+							,page: true //开启分页
+							,cols: [[ //表头
+							  {field: 'len', title: 'ID', width:60, sort: true, fixed: 'left'}
+							  ,{field: 'ID', title: '用户名', width:80}
+							  ,{field: 'name', title: '名称', width:80, sort: true}
+							  ,{field: 'xin', title: '数据状态', width:80,edit:'text'} 
+							  ,{field: 'xin2', title: '编码', width:80} 
+							  ,{field: 'xin3', title: '数据', width:80}
+							  ,{field: 'xin4', title: '数据', width:80}
+							  ,{field: 'xin5', title: '数据', width:80}
+							  ,{field: 'time', title: '时间', width:80} 
+							   
+							  ,{field: 'bianji', title: '编辑', width: 170, sort: true,toolbar: '#barDemo'}
+							]],
+							done:function (){
+							    $('.layui-laypage-skip').css('display','none');
+							    $('.layui-laypage-default').css('margin-left','-15px');
+							}
+						  });
+						
+						//监听表格复选框选择
+						table.on('checkbox(demo)', function(obj) {
+							console.log(obj)
+						});
+											
+						//监听工具条
+						table.on('tool(demo)', function(obj) {
+							var data = obj.data;
+							if (obj.event === 'tableSelect') {
+								// layer.msg('name：' + data.name + ' 的查看操作');
+								layer.open({
+									type : 2,
+									title : '客户信息',
+									content : 'tableSelect?name=' + data.name,
+									shade : 0.5,
+									area : [ '300px', '200px' ],
+									maxmin : true
+								});
+							} else if (obj.event === 'tableDelete') {
+								layer.confirm('真的要删除这行么', function(index) {
+									obj.del();
+									console.log(obj);
+									console.log(data.xin2);
+									var xdel={
+										FormId:"k8152c172ab47452887cbf04bfad6547f",
+										"Numbers": [data.xin2],	
+									}
+									$.ajax({
+										type : "post",
+										url : "http://192.168.1.189:88/k3cloud/k3cloud/Kingdee.BOS.WebApi.ServicesStub.DynamicFormService.Delete.common.kdsvc",
+										data:{data:JSON.stringify(xdel)},
+										dataType : "json"
+									});
+									layer.close(index);
+								});
+
+							} else if (obj.event === 'tableUpdate') {
+								layer.alert('编辑行：<br>'+ JSON.stringify(data))										
+								$.ajax({
+									type : "post",
+									data : data,
+									url : "tableUpdate",
+									dataType : "json"
+								});
+
+							}
+						});
+							  
+							})
+						}
+				 				 		
+				 	},
+				error:function(error){
+					console.log(error);
+				},
+				})
+			}
+	
+		 },
+		 error:function(error){
+			 console.log(error);
+		 }
+	 })
+		 
+		
+	})
+</script>
+</body>
+</html>
